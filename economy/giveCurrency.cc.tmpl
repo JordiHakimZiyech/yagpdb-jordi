@@ -16,7 +16,7 @@
     (carg "int" "amount of currency") }}
 {{ if gt ($args.Get 1) 1 }}
 {{ if gt (toInt (dbGet .User.ID "coins").Value) ($args.Get 1) }}
-{{ .User.Mention }} has given <@{{$args.Get 0}}> {{ $args.Get 1 }} $name {{ $givecoins := dbIncr ($args.Get 0) "coins" ($args.Get 1) }} 
+{{ .User.Mention }} has given <@{{$args.Get 0}}> {{ $args.Get 1 }} {{ $name }} {{ $givecoins := dbIncr ($args.Get 0) "coins" ($args.Get 1) }} 
 {{ $newcoins := sub (toInt (dbGet .User.ID "coins").Value) ($args.Get 1) }}
 {{ dbSet .User.ID "coins" $newcoins }}
 {{ else }} you dont have { {humanizeThousands ($args.Get 1) }} {{ $name }} 
