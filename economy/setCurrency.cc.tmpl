@@ -1,0 +1,18 @@
+{{/*
+	This command sets the amount of money of a user
+	Usage: "-set @user value"
+ 
+	Recommended trigger: -set(name of currency) 
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{/* Configuration variables end */}}
+{{ $args := parseArgs 2 "usage is: -set @user amount"
+(carg "userid" "user to give currency to")
+    (carg "int" "amount of currency") }}
+{{ dbSet ($args.Get 0) "coins" ($args.Get 1) }}
+{{ $name }} total has been set to {{$args.Get 1}} for <@{{$args.Get 0}}>
