@@ -17,10 +17,10 @@
 {{ $var := randInt 3 }}
 {{ $newcoins := sub ((dbGet .User.ID "coins").Value) $bet }}
  
-{{ if (dbGet .User.ID "rpscooldown") }}
-{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "RPS" "color" 16647943 "description" (print "You have to wait " (humanizeDurationSeconds ((dbGet .User.ID "rpscooldown").ExpiresAt.Sub currentTime)) " before you can play again")) }} {{ else }} {{ dbSetExpire .User.ID "rpscooldown" 1 $cooldown }}
 {{ $args := parseArgs 1 "usage is: -rps [rock/paper/scissor]"
 (carg "string" "choice") }}
+{{ if (dbGet .User.ID "rpscooldown") }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "RPS" "color" 16647943 "description" (print "You have to wait " (humanizeDurationSeconds ((dbGet .User.ID "rpscooldown").ExpiresAt.Sub currentTime)) " before you can play again")) }} {{ else }} {{ dbSetExpire .User.ID "rpscooldown" 1 $cooldown }}
 {{ if lt (toInt (dbGet .User.ID "coins").Value) $bet }}
 not enough coins {{ else }}
 	{{ if eq ($args.Get 0) "rock" }}
