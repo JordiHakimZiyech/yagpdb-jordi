@@ -1,0 +1,20 @@
+{{/*
+	This command deposits currency to the bank
+	Usage: "-deposit"
+ 
+	Recommended trigger: deposit
+	Trigger type: Command
+ 
+	Credits:
+	Made by Jordi
+*/}}
+{{/* Configuration variables start */}}
+{{ $name := "coins" }} {{/* the name of the currency */}}
+{{/* Configuration variables end */}}
+{{ $args := parseArgs 1 "usage is: -deposit amount" (carg "int" "amount of coins") }}
+{{ if ge ($args.Get 0) 1 }}
+{{ if ge (toInt (dbGet .User.ID "coins").Value) ($args.Get 0) }}
+{{ .User.Mention }} has stored {{ $args.Get 0 }} {{ $name }} {{ $up := dbIncr .User.ID "bank" ($args.Get 0) }} 
+{{ $newcoins := sub (toInt (dbGet .User.ID "coins").Value) ($args.Get 0) }}
+{{ dbSet .User.ID "coins" $newcoins }}
+{{ else }} you dont have {{ humanizeThousands ($args.Get 0)}} {{ $name }} {{ end }} {{ else }} number has to be above 1 {{ end }}
