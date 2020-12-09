@@ -1,9 +1,9 @@
 {{/*
 	This command steals from someone
-	Usage: "-steal"
+	Usage: "-steal" or "-rob"
  
-	Recommended trigger: steal
-	Trigger type: Command
+	Recommended trigger: `\A(-|<@!?204255221017214977>\s*)(rob|steal)(\s+|\z)`
+	Trigger type: regex
  
 	Credits:
 	Made by Jordi
@@ -18,5 +18,5 @@
 {{ if (dbGet .User.ID "stealcooldown") }}
 {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "steal" "color" 16647943 "description" (print "You have to wait " (humanizeDurationMinutes ((dbGet .User.ID "stealcooldown").ExpiresAt.Sub currentTime)) " before you can steal again!")) }} {{ else if (dbGet ($args.Get 0) "stealcooldown2") }} the user you are trying to steal from, has a cooldown! {{ else }} {{ dbSetExpire .User.ID "stealcooldown" 1 $cooldown }} {{ dbSetExpire ($args.Get 0) "stealcooldown2" 1 $cooldown}} {{ $crime := randInt 1 100 }}
 {{ if lt $crime 75 }}
-{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Steal" "color" 16647943 "description" (print "You failed robbing, try better next time!")) }} 
-{{ els e}} {{ $frick := dbIncr .User.ID "coins" $lost1W }} {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Steal" "color" 3014151 "description" (print "You robbed someone and got " (humanizeThousands $lost1W) " " $name)) }} {{ dbSet ($args.Get 0) "coins" $lostW }} {{ end }} {{ end }}
+{{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Steal" "color" 16647943 "description" (print "You failed robbing " (userArg ($args.Get 0)).Mention ", try better next time!")) }} 
+{{ else }} {{ $frick := dbIncr .User.ID "coins" $lost1W }} {{ sendMessage nil (cembed "author" (sdict "name" .User.String "icon_url" (.User.AvatarURL "512")) "title" "Steal" "color" 3014151 "description" (print "You robbed " (userArg ($args.Get 0)).Mention " and got " (humanizeThousands $lost1W) " " $name)) }} {{ dbSet ($args.Get 0) "coins" $lostW }} {{ end }} {{ end }}
